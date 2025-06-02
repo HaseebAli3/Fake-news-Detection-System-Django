@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake News Detection</title>
+    <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/1a73e8/shield.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #f8fafc;
+            --dark: #1e293b;
+            --light: #ffffff;
+            --gray: #64748b;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: #f9fafb;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--light);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 8px;
+            align-items: center;
+        }
+
+        nav ul li {
+            position: relative;
+        }
+
+        nav ul li a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 6px 10px;
+            border-radius: var(--border-radius);
+            font-size: 15px;
+            white-space: nowrap;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        .nav-btn {
+            background-color: var(--primary);
+            color: white !important;
+            padding: 6px 14px !important;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn:hover {
+            background-color: var(--primary-dark) !important;
+            transform: translateY(-1px);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 22px;
+            color: var(--gray);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .search-form {
+            display: flex;
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            background-color: var(--light);
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            font-size: 16px;
+            background-color: var(--light);
+            transition: var(--transition);
+        }
+
+        .search-container input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+
+        .search-container button {
+            padding: 16px 32px;
+            border: none;
+            background-color: var(--primary);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .search-container button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Articles Section */
+        .main-content {
+            padding: 60px 0;
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .admin-btn {
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .admin-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .article-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        .article-card {
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .article-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .article-card .content {
+            padding: 24px;
+        }
+
+        .article-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--dark);
+            line-height: 1.4;
+        }
+
+        .article-card p {
+            font-size: 15px;
+            color: var(--gray);
+            margin-bottom: 16px;
+        }
+
+        .article-card .meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 48px 0;
+            gap: 8px;
+        }
+
+        .pagination-btn {
+            padding: 10px 16px;
+            background-color: var(--light);
+            color: var(--dark);
+            border: 1px solid #e2e8f0;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .pagination-btn:hover, .pagination-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 40px 0;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-logo {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        .footer-links h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                width: 100%;
+                gap: 6px;
+                display: none;
+            }
+
+            nav ul.show {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                position: absolute;
+                right: 20px;
+                top: 16px;
+            }
+
+            .hero {
+                padding: 80px 0;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .header-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .search-container button {
+                padding: 16px 20px;
+            }
+
+            .article-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-shield-alt" style="color: var(--primary); font-size: 22px;"></i>
+                <span class="logo-text">Fake News Detection</span>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav>
+                <ul id="navMenu">
+                    <li><a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-newspaper"></i> Articles</a></li>
+                    <li><a href="{% url 'about' %}"><i class="fas fa-info-circle"></i> About</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'signout' %}"><i class="fas fa-sign-out-alt"></i> Sign Out</a></li>
+                    {% else %}
+                        <li><a href="{% url 'signup' %}"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+                        <li><a href="{% url 'signin' %}"><i class="fas fa-sign-in-alt"></i> Sign In</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'contactus' %}"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="{% url 'predict' %}" class="nav-btn"><i class="fas fa-search"></i> Detect Now</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>Explore Fact-Based Journalism</h1>
+            <p>Read carefully curated, fact-checked articles powered by our advanced Fact Check Api, ensuring you access only reliable and truthful content.</p>
+            <div class="search-container">
+                <form action="{% url 'article_search' %}" method="GET" class="search-form">
+                    <input type="text" name="q" placeholder="Search fact-based articles..." required>
+                    <button type="submit"><i class="fas fa-search"></i> Search</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Articles Section -->
+    <main class="main-content">
+        <div class="container">
+            <div class="header-section">
+                <h2 class="section-title">Recent Articles</h2>
+                {% if user.is_authenticated and user.is_staff %}
+                    <a href="{% url 'blog_list' %}" class="admin-btn">Go to Admin Panel</a>
+                {% endif %}
+            </div>
+
+            <div class="article-container" id="article-list">
+                {% include 'article_list.html' %}
+            </div>
+
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1" class="pagination-btn">1</a>
+                    {% if page_obj.previous_page_number != 1 %}
+                        <a href="?page={{ page_obj.previous_page_number }}" class="pagination-btn">{{ page_obj.previous_page_number }}</a>
+                    {% endif %}
+                {% endif %}
+
+                <a href="?page={{ page_obj.number }}" class="pagination-btn active">{{ page_obj.number }}</a>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="pagination-btn">{{ page_obj.next_page_number }}</a>
+                    {% if page_obj.next_page_number != page_obj.paginator.num_pages %}
+                        <a href="?page={{ page_obj.paginator.num_pages }}" class="pagination-btn">{{ page_obj.paginator.num_pages }}</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-about">
+                    <div class="footer-logo">Fake News Detection</div>
+                    <p>Delivering fact-checked, reliable articles through advanced Fact Check Api for a more informed world.</p>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="#">Articles</a></li>
+                        <li><a href="{% url 'about' %}">About</a></li>
+                        <li><a href="{% url 'contactus' %}">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Account</h3>
+                    <ul>
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'signout' %}">Sign Out</a></li>
+                        {% else %}
+                            <li><a href="{% url 'signin' %}">Sign In</a></li>
+                            <li><a href="{% url 'signup' %}">Create Account</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">API Documentation</a></li>
+                        <li><a href="#">Research Papers</a></li>
+                        <li><a href="#">Methodology</a></li>
+                        <li><a href="#">Accuracy Report</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2025 Fake News Detection. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('show');
+        });
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('#navMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navMenu').classList.remove('show');
+            });
+        });
+    </script>
+</body>
+</html>

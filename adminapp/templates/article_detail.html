@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }} - Fake News Detection</title>
+    <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/1a73e8/shield.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #f8fafc;
+            --dark: #1e293b;
+            --light: #ffffff;
+            --gray: #64748b;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: #f9fafb;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* Header Styles */
+        header.navbar {
+            background-color: var(--light);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 8px;
+            align-items: center;
+        }
+
+        nav ul li {
+            position: relative;
+        }
+
+        nav ul li a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 6px 10px;
+            border-radius: var(--border-radius);
+            font-size: 15px;
+            white-space: nowrap;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        .nav-btn {
+            background-color: var(--primary);
+            color: white !important;
+            padding: 6px 14px !important;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn:hover {
+            background-color: var(--primary-dark) !important;
+            transform: translateY(-1px);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 22px;
+            color: var(--gray);
+            cursor: pointer;
+        }
+
+        /* Article Header */
+        .article-header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        .article-header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+            padding: 0 20px;
+        }
+
+        .article-header .meta {
+            font-size: 16px;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .article-header .meta .dot {
+            width: 5px;
+            height: 5px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        /* Article Content */
+        .article-content {
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 40px;
+            margin: 40px 0;
+            width: 100%;
+            transition: var(--transition);
+        }
+
+        .article-content:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .article-content p {
+            font-size: 18px;
+            color: var(--dark);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .article-content p:first-of-type::first-letter {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--primary);
+            float: left;
+            line-height: 0.8;
+            margin-right: 12px;
+            margin-top: 8px;
+        }
+
+        /* Donation Section */
+        .donation-section {
+            width: 100%;
+            margin: 0 0 60px;
+        }
+
+        .donation-section h3 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .donation-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 60%;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .donation-form {
+            background-color: var(--light);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .donation-form:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .donation-form input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            margin-bottom: 15px;
+            transition: var(--transition);
+        }
+
+        .donation-form input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+
+        .donation-form button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .donation-form button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .donation-error {
+            color: var(--danger);
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Comment Section */
+        .comment-section {
+            width: 100%;
+            margin: 0 0 60px;
+        }
+
+        .comment-section h3 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .comment-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 60%;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .comment-form {
+            background-color: var(--light);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+            transition: var(--transition);
+        }
+
+        .comment-form:hover, .comment-form:focus-within {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            min-height: 120px;
+            resize: vertical;
+            transition: var(--transition);
+        }
+
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+
+        .comment-form button {
+            padding: 12px 25px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .comment-form button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .comment-form p a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .comment-form p a:hover {
+            text-decoration: underline;
+        }
+
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .comment {
+            background-color: var(--light);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .comment:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .comment::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+            opacity: 0.7;
+        }
+
+        .comment .user {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .comment .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(37, 99, 235, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        .comment .meta {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 12px;
+            margin-left: 50px;
+        }
+
+        .comment p {
+            font-size: 16px;
+            color: var(--dark);
+            line-height: 1.7;
+            margin-left: 50px;
+        }
+
+        .no-comments {
+            text-align: center;
+            padding: 30px;
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 40px 0;
+            width: 100%;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-logo {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        .footer-links h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .article-header h1 {
+                font-size: 40px;
+            }
+
+            .article-content {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                width: 100%;
+                gap: 6px;
+                display: none;
+            }
+
+            nav ul.show {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                position: absolute;
+                right: 20px;
+                top: 16px;
+            }
+
+            .article-header {
+                padding: 60px 0;
+            }
+
+            .article-header h1 {
+                font-size: 36px;
+            }
+
+            .article-content {
+                padding: 25px;
+                margin: 30px 0;
+            }
+
+            .donation-form, .comment-form, .comment {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .article-header h1 {
+                font-size: 28px;
+            }
+
+            .article-header .meta {
+                font-size: 14px;
+            }
+
+            .article-content p {
+                font-size: 16px;
+            }
+
+            .article-content p:first-of-type::first-letter {
+                font-size: 40px;
+                margin-top: 5px;
+            }
+
+            .donation-section h3, .comment-section h3 {
+                font-size: 24px;
+            }
+
+            .donation-form input[type="number"],
+            .comment-form textarea,
+            .comment p {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-shield-alt" style="color: var(--primary); font-size: 22px;"></i>
+                <span class="logo-text">Fake News Detection</span>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav>
+                <ul id="navMenu">
+                    <li><a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-newspaper"></i> Articles</a></li>
+                    <li><a href="{% url 'about' %}"><i class="fas fa-info-circle"></i> About</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'signout' %}"><i class="fas fa-sign-out-alt"></i> Sign Out</a></li>
+                    {% else %}
+                        <li><a href="{% url 'signup' %}"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+                        <li><a href="{% url 'signin' %}"><i class="fas fa-sign-in-alt"></i> Sign In</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'contactus' %}"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="{% url 'predict' %}" class="nav-btn"><i class="fas fa-search"></i> Detect Now</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Article Header -->
+    <header class="article-header">
+        <div class="container">
+            <h1>{{ post.title }}</h1>
+            <div class="meta">
+                <span>{{ post.datetime|date:"F d, Y" }}</span>
+                <span class="dot"></span>
+                <span>{{ post.datetime|date:"H:i" }}</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Article Content -->
+    <div class="container">
+        <div class="article-content">
+            {{ post.content|safe }}
+        </div>
+
+        <!-- Donation Section -->
+        <div class="donation-section">
+            <h3>Support Fact-Based Journalism</h3>
+            <div class="donation-form">
+                <input type="number" id="donationAmount" placeholder="Enter amount (USD)" min="1" step="0.01" required>
+                <button id="donateButton">Donate Now</button>
+                <div class="donation-error" id="donationError"></div>
+            </div>
+        </div>
+
+        <!-- Comment Section -->
+        <div class="comment-section">
+            <h3>Comments</h3>
+            {% if user.is_authenticated %}
+                <form class="comment-form" method="post" id="commentForm">
+                    {% csrf_token %}
+                    <textarea name="content" placeholder="Share your thoughts on this article..." required></textarea>
+                    <button type="submit">Post Comment</button>
+                </form>
+            {% else %}
+                <div class="comment-form">
+                    <p>Please <a href="{% url 'signin' %}">sign in</a> to leave a comment.</p>
+                </div>
+            {% endif %}
+
+            <div class="comments-list" id="commentsList">
+                {% for comment in comments %}
+                    <div class="comment">
+                        <div class="user">
+                            <div class="user-avatar">{{ comment.user.username|make_list|first|upper }}</div>
+                            {{ comment.user.username }}
+                        </div>
+                        <div class="meta">{{ comment.created_at|date:"F d, Y at H:i" }}</div>
+                        <p>{{ comment.content|linebreaks }}</p>
+                    </div>
+                {% empty %}
+                    <div class="no-comments">
+                        <p>No comments yet. Be the first to comment!</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-about">
+                    <div class="footer-logo">Fake News Detection</div>
+                    <p>Delivering fact-checked, reliable articles through advanced Fact Check Api for a more informed world.</p>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="#">Articles</a></li>
+                        <li><a href="{% url 'about' %}">About</a></li>
+                        <li><a href="{% url 'contactus' %}">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Account</h3>
+                    <ul>
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'signout' %}">Sign Out</a></li>
+                        {% else %}
+                            <li><a href="{% url 'signin' %}">Sign In</a></li>
+                            <li><a href="{% url 'signup' %}">Create Account</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">API Documentation</a></li>
+                        <li><a href="#">Research Papers</a></li>
+                        <li><a href="#">Methodology</a></li>
+                        <li><a href="#">Accuracy Report</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2025 Fake News Detection. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        const stripe = Stripe('pk_test_51RHj8OGhl0mNQDnbzg4WhALVLGK7oxJeseN48zCx17Eu9NtNwsK6QH731rHiERBxA9aLE2UDgFARvNr9FUSir4IQ00Kpn8R0SS');
+
+        document.getElementById('donateButton').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const amount = document.getElementById('donationAmount').value;
+            const errorElement = document.getElementById('donationError');
+            
+            if (!amount || amount <= 0) {
+                errorElement.textContent = 'Please enter a valid amount';
+                errorElement.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch('/create-checkout-session/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        amount: parseFloat(amount)
+                    })
+                });
+
+                const session = await response.json();
+                if (session.error) {
+                    errorElement.textContent = session.error;
+                    errorElement.style.display = 'block';
+                    return;
+                }
+
+                const result = await stripe.redirectToCheckout({
+                    sessionId: session.sessionId
+                });
+
+                if (result.error) {
+                    errorElement.textContent = result.error.message;
+                    errorElement.style.display = 'block';
+                }
+            } catch (error) {
+                errorElement.textContent = 'An error occurred. Please try again.';
+                errorElement.style.display = 'block';
+            }
+        });
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Mobile menu toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('show');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('#navMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navMenu').classList.remove('show');
+            });
+        });
+
+        // Comment form animation
+        const commentForm = document.getElementById('commentForm');
+        if (commentForm) {
+            commentForm.addEventListener('submit', function(e) {
+                const textarea = this.querySelector('textarea');
+                const button = this.querySelector('button');
+                if (textarea.value.trim() !== '') {
+                    button.innerHTML = 'Posting...';
+                    button.style.opacity = '0.7';
+                }
+            });
+        }
+
+        // Animate comments on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                        entry.target.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.comment').forEach(comment => {
+                comment.style.opacity = 0;
+                comment.style.transform = 'translateY(20px)';
+                observer.observe(comment);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Fake News Detection</title>
+    <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/1a73e8/shield.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #f8fafc;
+            --dark: #1e293b;
+            --light: #ffffff;
+            --gray: #64748b;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: #f9fafb;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* Header Styles */
+        header.navbar {
+            background-color: var(--light);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 8px;
+            align-items: center;
+        }
+
+        nav ul li {
+            position: relative;
+        }
+
+        nav ul li a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 6px 10px;
+            border-radius: var(--border-radius);
+            font-size: 15px;
+            white-space: nowrap;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        .nav-btn {
+            background-color: var(--primary);
+            color: white !important;
+            padding: 6px 14px !important;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn:hover {
+            background-color: var(--primary-dark) !important;
+            transform: translateY(-1px);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 22px;
+            color: var(--gray);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 60px 0;
+            width: 100%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--dark);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 12px;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .section-title p {
+            font-size: 18px;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 16px auto 0;
+        }
+
+        .content-container {
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+            width: 100%;
+            transition: var(--transition);
+        }
+
+        .content-container:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-container h3 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 16px;
+        }
+
+        .content-container p {
+            font-size: 16px;
+            color: var(--gray);
+            margin-bottom: 16px;
+        }
+
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin: 40px 0;
+            width: 100%;
+        }
+
+        .feature-card {
+            background-color: var(--light);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            font-size: 15px;
+            color: var(--gray);
+        }
+
+        .terminology-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            width: 100%;
+        }
+
+        .terminology-item {
+            background-color: var(--secondary);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            transition: var(--transition);
+        }
+
+        .terminology-item:hover {
+            background-color: var(--light);
+            box-shadow: var(--shadow);
+        }
+
+        .terminology-item h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .terminology-item p {
+            font-size: 15px;
+            color: var(--gray);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 40px 0;
+            width: 100%;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-logo {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        .footer-links h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .section-title h2 {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                width: 100%;
+                gap: 6px;
+                display: none;
+            }
+
+            nav ul.show {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                position: absolute;
+                right: 20px;
+                top: 16px;
+            }
+
+            .hero {
+                padding: 60px 0;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .section {
+                padding: 40px 0;
+            }
+
+            .content-container {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .section-title h2 {
+                font-size: 24px;
+            }
+
+            .content-container {
+                padding: 20px;
+            }
+
+            .feature-card {
+                padding: 20px;
+            }
+
+            .terminology-item {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-shield-alt" style="color: var(--primary); font-size: 22px;"></i>
+                <span class="logo-text">Fake News Detection</span>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav>
+                <ul id="navMenu">
+                    <li><a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="{% url 'articles' %}"><i class="fas fa-newspaper"></i> Articles</a></li>
+                    <li><a href="{% url 'about' %}"><i class="fas fa-info-circle"></i> About</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'signout' %}"><i class="fas fa-sign-out-alt"></i> Sign Out</a></li>
+                    {% else %}
+                        <li><a href="{% url 'signup' %}"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+                        <li><a href="{% url 'signin' %}"><i class="fas fa-sign-in-alt"></i> Sign In</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'contactus' %}"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="{% url 'predict' %}" class="nav-btn"><i class="fas fa-search"></i> Detect Now</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>About Our Mission</h1>
+            <p>Delivering fact-checked, reliable articles through advanced Fact Check Api to combat misinformation.</p>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="section container">
+        <div class="section-title">
+            <h2>Our Mission</h2>
+            <p>Building a trustworthy information ecosystem with AI-driven fact-checking</p>
+        </div>
+        <div class="content-container">
+            <h3>Defending Truth in the Digital Age</h3>
+            <p>Our mission is to create a digital environment where readers can trust the information they consume. Using advanced Fact Check Api, we detect and flag fake news, empowering users with accurate, fact-checked content.</p>
+            <p>We aim to enhance digital literacy and reduce the spread of misinformation. In an era where distinguishing truth from fiction is challenging, our platform provides reliable tools and resources to make informed decisions easier.</p>
+            <p>Our detection methods evolve with the sophistication of fake news, combining AI automation with human oversight. We are committed to protecting truth and transparency in digital spaces.</p>
+        </div>
+    </section>
+
+    <!-- Aim Section -->
+    <section class="section container">
+        <div class="section-title">
+            <h2>What We Aim For</h2>
+            <p>Creating a future where information integrity is paramount</p>
+        </div>
+        <div class="features-container">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Proactive Detection</h3>
+                <p>Our AI evolves to identify misinformation patterns, analyzing linguistic cues, source credibility, and context to flag fake news before it spreads.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3>Public Education</h3>
+                <p>We provide resources to build critical thinking and digital literacy skills, helping people evaluate information effectively.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <h3>Collaborative Solutions</h3>
+                <p>We partner with media, educators, and policymakers to address misinformation systemically through a network of stakeholders.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Terminology Section -->
+    <section class="section container">
+        <div class="section-title">
+            <h2>Key Terminology</h2>
+            <p>Understanding the language of misinformation detection</p>
+        </div>
+        <div class="content-container">
+            <p>To engage with fake news detection, understanding key terms is essential. Below are definitions to navigate our platform and the broader conversation about misinformation:</p>
+            <div class="terminology-list">
+                <div class="terminology-item">
+                    <h4>Misinformation</h4>
+                    <p>False or inaccurate information spread without intent to deceive, often believed to be true by the sharer.</p>
+                </div>
+                <div class="terminology-item">
+                    <h4>Disinformation</h4>
+                    <p>Deliberately false information created and spread to deceive, aiming to influence or mislead audiences.</p>
+                </div>
+                <div class="terminology-item">
+                    <h4>Clickbait</h4>
+                    <p>Sensationalized content designed to attract clicks, often using misleading or exaggerated headlines.</p>
+                </div>
+                <div class="terminology-item">
+                    <h4>Echo Chamber</h4>
+                    <p>An environment where individuals are exposed only to opinions aligning with their own, reinforcing biases.</p>
+                </div>
+                <div class="terminology-item">
+                    <h4>Confirmation Bias</h4>
+                    <p>The tendency to favor information that confirms existing beliefs while ignoring contradictory evidence.</p>
+                </div>
+                <div class="terminology-item">
+                    <h4>Deepfake</h4>
+                    <p>AI-generated synthetic media that convincingly alters a person’s likeness in audio or video content.</p>
+                </div>
+                <div class="terminology-item">
+                    <h4>Source Credibility</h4>
+                    <p>A measure of a source’s trustworthiness based on accuracy, expertise, transparency, and journalistic standards.</p>
+                </div>
+                <div class="terminology-item">
+                    <h4>Digital Literacy</h4>
+                    <p>The ability to critically evaluate, utilize, and create content using digital technologies and the internet.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-about">
+                    <div class="footer-logo">Fake News Detection</div>
+                    <p>Delivering fact-checked, reliable articles through advanced Fact Check Api for a more informed world.</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'articles' %}">Articles</a></li>
+                        <li><a href="{% url 'about' %}">About</a></li>
+                        <li><a href="{% url 'contactus' %}">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Account</h3>
+                    <ul>
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'signout' %}">Sign Out</a></li>
+                        {% else %}
+                            <li><a href="{% url 'signin' %}">Sign In</a></li>
+                            <li><a href="{% url 'signup' %}">Create Account</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">API Documentation</a></li>
+                        <li><a href="#">Research Papers</a></li>
+                        <li><a href="#">Methodology</a></li>
+                        <li><a href="#">Accuracy Report</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2025 Fake News Detection. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('show');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('#navMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navMenu').classList.remove('show');
+            });
+        });
+    </script>
+</body>
+</html>

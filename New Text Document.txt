@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fake News Detection System</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/1a73e8/shield.png">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-blue: #1a73e8;
+      --primary-light: #e8f0fe;
+      --accent-blue: #4285f4;
+      --accent-light: #8ab4f8;
+      --text-dark: #202124;
+      --text-light: #ffffff;
+      --text-gray: #5f6368;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      color: var(--text-dark);
+      background-color: var(--text-light);
+      margin: 0;
+    }
+
+    .hero-section {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .navbar {
+      position: absolute;
+      width: 100%;
+      z-index: 1000;
+      padding: 20px 5%;
+      background: transparent;
+    }
+
+    .navbar-brand {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 2rem;
+      color: var(--primary-blue);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .navbar-brand i {
+      color: var(--accent-blue);
+    }
+
+    .btn-primary {
+      background-color: var(--primary-blue);
+      border: none;
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      text-transform: uppercase;
+      color: var(--text-light);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-blue);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(26, 115, 232, 0.3);
+    }
+
+    .hero-content {
+      position: absolute;
+      top: 50%;
+      left: 10%;
+      transform: translateY(-50%);
+      max-width: 600px;
+      z-index: 10;
+    }
+
+    .hero-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+      color: var(--text-dark);
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+      color: var(--text-dark);
+      font-weight: 600;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    .hero-highlight {
+      color: var(--primary-blue);
+      font-weight: 700;
+    }
+
+    .slideshow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+      background-size: cover;
+      background-position: center;
+      filter: blur(2px);
+    }
+
+    .slide.active {
+      opacity: 0.85;
+    }
+
+    .slide-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .icon-container {
+      position: absolute;
+      top: 20%;
+      right: 5%;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .icon-box {
+      background-color: var(--primary-light);
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+    }
+
+    .icon-box:hover {
+      transform: scale(1.1);
+      background-color: var(--accent-light);
+    }
+
+    .icon-box i {
+      color: var(--primary-blue);
+      font-size: 1.5rem;
+    }
+
+    .dynamic-text {
+      display: inline-block;
+      font-weight: 900;
+      font-size: 2.2rem;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+      color: var(--primary-blue);
+      letter-spacing: 1.5px;
+    }
+
+    .dynamic-text span {
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+
+    .dynamic-text span:hover {
+      color: var(--accent-blue);
+      transform: translateY(-3px);
+      text-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+    }
+
+    @media (max-width: 992px) {
+      .hero-title { font-size: 2.5rem; }
+      .hero-content { left: 5%; right: 5%; max-width: 100%; padding-right: 5%; }
+      .navbar-brand { font-size: 1.7rem; }
+      .dynamic-text { font-size: 1.9rem; }
+      .slide { filter: blur(1px); }
+      .icon-container { right: 2%; top: 15%; }
+      .icon-box { width: 50px; height: 50px; }
+      .icon-box i { font-size: 1.2rem; }
+      .hero-subtitle { font-size: 1.1rem; }
+    }
+
+    @media (max-width: 768px) {
+      .hero-title { font-size: 2rem; }
+      .hero-subtitle { font-size: 1rem; }
+      .btn-primary { padding: 10px 20px; font-size: 0.9rem; }
+      .dynamic-text { font-size: 1.7rem; }
+      .slide { filter: none; }
+      .icon-container { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero-section">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <i class="fas fa-search"></i> 
+          <span class="dynamic-text">
+            <span>F</span><span>a</span><span>k</span><span>e</span><span> </span>
+            <span>N</span><span>e</span><span>w</span><span>s</span><span> </span>
+            <span>D</span><span>e</span><span>t</span><span>e</span><span>c</span><span>t</span><span>i</span><span>o</span><span>n</span><span> </span>
+            <span>S</span><span>y</span><span>s</span><span>t</span><span>e</span><span>m</span>
+          </span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="slideshow">
+      <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1586339949916-3e9457bef6d3?auto=format&fit=crop&w=2070&q=80');">
+        <div class="slide-overlay"></div>
+      </div>
+      <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?auto=format&fit=crop&w=2070&q=80');">
+        <div class="slide-overlay"></div>
+      </div>
+      <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=2070&q=80');">
+        <div class="slide-overlay"></div>
+      </div>
+    </div>
+
+    <div class="hero-content">
+      <h1 class="hero-title">Journalistic-Grade <span class="hero-highlight">Fact Verification</span></h1>
+      <p class="hero-subtitle">Our system combines investigative journalism techniques with advanced machine learning models to analyze news articles. We examine sources, cross-reference facts, and evaluate writing patterns to detect misinformation with <span class="hero-highlight">90% accuracy</span>, providing you with reliable, research-backed results.</p>
+      <a href="{% url 'predict' %}" class="btn btn-primary">
+        <i class="fas fa-check-circle"></i> Verify Article
+      </a>
+    </div>
+
+    <div class="icon-container">
+      <div class="icon-box" title="Fact Checking">
+        <i class="fas fa-check-double"></i>
+      </div>
+      <div class="icon-box" title="Source Analysis">
+        <i class="fas fa-globe"></i>
+      </div>
+      <div class="icon-box" title="AI Detection">
+        <i class="fas fa-robot"></i>
+      </div>
+      <div class="icon-box" title="Accuracy">
+        <i class="fas fa-bullseye"></i>
+      </div>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Slideshow functionality
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+
+    function changeSlide() {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add('active');
+    }
+
+    setInterval(changeSlide, 5000);
+  </script>
+</body>
+</html>

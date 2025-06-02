@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog List</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/1a73e8/shield.png">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1a73e8;
+            --primary-light: #e8f0fe;
+            --accent-blue: #4285f4;
+            --accent-light: #8ab4f8;
+            --text-dark: #202124;
+            --text-light: #ffffff;
+            --text-gray: #5f6368;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #f8f9fa;
+            color: var(--text-dark);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .navbar-custom {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-custom {
+            background-color: var(--primary-blue);
+            color: var(--text-light);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .btn-custom:hover {
+            background-color: var(--accent-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 115, 232, 0.3);
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-container input {
+            width: 80%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid var(--primary-light);
+            border-radius: 5px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-container input:focus {
+            border-color: var(--primary-blue);
+        }
+
+        .search-container button {
+            background: var(--primary-blue);
+            color: var(--text-light);
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .search-container button:hover {
+            background: var(--accent-blue);
+        }
+
+        .create-btn {
+            display: inline-block;
+            background: var(--primary-blue);
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .create-btn:hover {
+            background: var(--accent-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 115, 232, 0.3);
+        }
+
+        .blog-list {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .blog-item {
+            background: var(--text-light);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .blog-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .blog-item img {
+            width: 150px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .blog-info {
+            flex: 1;
+            padding: 0 20px;
+        }
+
+        .blog-info h2 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .blog-info h2 a {
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .blog-info h2 a:hover {
+            color: var(--primary-blue);
+        }
+
+        .blog-info p {
+            font-size: 14px;
+            color: var(--text-gray);
+        }
+
+        .blog-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn {
+            background: var(--primary-blue);
+        }
+
+        .edit-btn:hover {
+            background: var(--accent-blue);
+        }
+
+        .delete-btn {
+            background: #dc3545;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-custom {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .blog-item {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px;
+            }
+
+            .blog-info {
+                padding: 10px 0;
+            }
+
+            .blog-actions {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .search-container input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Buttons -->
+    <div class="navbar-custom">
+        <a href="#" class="btn-custom">
+            <i class="fas fa-check-circle"></i> Fake News Detection
+        </a>
+        <a href="{% url 'articles' %}" class="btn-custom">
+            <i class="fas fa-newspaper"></i> Articles
+        </a>
+    </div>
+
+    <!-- Search Form -->
+    <form method="GET" class="search-container">
+        <input type="text" name="search" placeholder="Search by title">
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Create New Blog Button -->
+    <a href="{% url 'create_blog' %}" class="create-btn">Create New Blog</a>
+
+    <!-- Blog List -->
+    <div class="blog-list">
+        {% for blog in blogs %}
+            <div class="blog-item">
+                <img src="{{ blog.thumbnail.url }}" alt="Blog Thumbnail">
+                <div class="blog-info">
+                    <h2><a href="{% url 'blog_detail' blog.id %}">{{ blog.title }}</a></h2>
+                    <p>Posted on: {{ blog.created_at }}</p>
+                </div>
+                <div class="blog-actions">
+                    <a href="{% url 'update_blog' blog.id %}" class="edit-btn">Edit</a>
+                    <a href="{% url 'delete_blog' blog.id %}" class="delete-btn" onclick="return confirm('Are you sure?')">Delete</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

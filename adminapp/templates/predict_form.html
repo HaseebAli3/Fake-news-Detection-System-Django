@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyze News - Fake News Detection</title>
+    <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/1a73e8/shield.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #f8fafc;
+            --dark: #1e293b;
+            --light: #ffffff;
+            --gray: #64748b;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: #f9fafb;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* Header Styles */
+        header.navbar {
+            background-color: var(--light);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 8px;
+            align-items: center;
+        }
+
+        nav ul li {
+            position: relative;
+        }
+
+        nav ul li a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 6px 10px;
+            border-radius: var(--border-radius);
+            font-size: 15px;
+            white-space: nowrap;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        .nav-btn {
+            background-color: var(--primary);
+            color: white !important;
+            padding: 6px 14px !important;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn:hover {
+            background-color: var(--primary-dark) !important;
+            transform: translateY(-1px);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 22px;
+            color: var(--gray);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 32px;
+            opacity: 0.9;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 60px 0;
+            width: 100%;
+        }
+
+        /* Detection Card */
+        .detection-card {
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 40px;
+            margin-bottom: 40px;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .detection-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        .detection-form {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-size: 16px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+            background-color: var(--secondary);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 32px auto 0;
+            width: 200px;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Results Section */
+        .results {
+            margin-top: 40px;
+            padding: 24px;
+            border-radius: var(--border-radius);
+            background-color: var(--secondary);
+        }
+
+        .results-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        .result-card {
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-card h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-item {
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .result-item strong {
+            color: var(--dark);
+        }
+
+        .result-item.claim {
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .result-item.claimant {
+            font-style: italic;
+            color: var(--gray);
+        }
+
+        .result-item.rating {
+            font-weight: 600;
+            color: var(--danger);
+        }
+
+        .result-item.rating.real {
+            color: var(--success);
+        }
+
+        .result-item.reviewer {
+            color: var(--gray);
+        }
+
+        .result-item.title {
+            font-weight: 500;
+            color: var(--primary-dark);
+        }
+
+        .result-item.link a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: var(--transition);
+            word-break: break-all;
+        }
+
+        .result-item.link a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .result-divider {
+            border-top: 1px solid #e2e8f0;
+            margin: 16px 0;
+        }
+
+        /* Info Section */
+        .info-section {
+            background-color: var(--light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 40px;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .info-section:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-top: 32px;
+        }
+
+        .info-card {
+            background-color: var(--secondary);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            transition: var(--transition);
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .info-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-card p {
+            color: var(--gray);
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .info-card ul {
+            margin-left: 20px;
+            color: var(--gray);
+            font-size: 15px;
+        }
+
+        .info-card li {
+            margin-bottom: 8px;
+        }
+
+        .accuracy-badge {
+            background-color: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 40px 0;
+            width: 100%;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-logo {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        .footer-links h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                width: 100%;
+                gap: 6px;
+                display: none;
+            }
+
+            nav ul.show {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                position: absolute;
+                right: 20px;
+                top: 16px;
+            }
+
+            .hero {
+                padding: 60px 0;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .detection-card,
+            .info-section {
+                padding: 30px;
+            }
+
+            .submit-btn {
+                width: 100%;
+            }
+
+            .result-card h4 {
+                font-size: 16px;
+            }
+
+            .result-item {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .detection-card,
+            .info-section {
+                padding: 20px;
+            }
+
+            .form-label,
+            .form-control {
+                font-size: 14px;
+            }
+
+            .results-title {
+                font-size: 20px;
+            }
+
+            .result-card h4 {
+                font-size: 15px;
+            }
+
+            .result-item {
+                font-size: 13px;
+            }
+
+            .info-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-shield-alt" style="color: var(--primary); font-size: 22px;"></i>
+                <span class="logo-text">Fake News Detection</span>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav>
+                <ul id="navMenu">
+                    <li><a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="{% url 'articles' %}"><i class="fas fa-newspaper"></i> Articles</a></li>
+                    <li><a href="{% url 'about' %}"><i class="fas fa-info-circle"></i> About</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'signout' %}"><i class="fas fa-sign-out-alt"></i> Sign Out</a></li>
+                    {% else %}
+                        <li><a href="{% url 'signup' %}"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+                        <li><a href="{% url 'signin' %}"><i class="fas fa-sign-in-alt"></i> Sign In</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'contactus' %}"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="#" class="nav-btn"><i class="fas fa-search"></i> Detect Now</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>AI-Powered News Analysis</h1>
+            <p>Verify news content with our Fact Check Api system, delivering fact-checked results with high accuracy.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Detection Card -->
+            <div class="detection-card">
+                <h2 class="section-title">Analyze News Content</h2>
+                
+                <form method="post" class="detection-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="news_text" class="form-label">Enter news content to analyze:</label>
+                        <textarea name="news_text" id="news_text" class="form-control" rows="8" placeholder="Paste the full text of the news article here..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-search"></i> Analyze
+                    </button>
+                </form>
+                
+                <div class="results">
+                    <h3 class="results-title">Analysis Results</h3>
+                    
+                    <!-- Result 1 -->
+                    <div class="result-card">
+                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> Result 1</h4>
+                        <div class="result-item claim"><strong>Claim:</strong> News of Imran Khan's death causes uproar in Pakistan</div>
+                        <div class="result-item claimant"><strong>Claimant:</strong> Facebook User News Thikana</div>
+                        <div class="result-item rating"><strong>Rating:</strong> False</div>
+                        <div class="result-item reviewer"><strong>Reviewed by:</strong> Unknown Publisher</div>
+                        <div class="result-item title"><strong>Title:</strong> Fact Check: Claim Of Imran Khan's Death In Jail Is Fake; Viral ...</div>
+                        <div class="result-item link"><strong>More info:</strong> <a href="https://www.vishvasnews.com/english/world/fact-check-claim-of-imran-khans-death-in-jail-is-fake-viral-statement-attributed-to-pakistans-foreign-ministry-is-fabricated/" target="_blank">Read more</a></div>
+                    </div>
+                    <div class="result-divider"></div>
+
+                    <!-- Result 2 -->
+                    <div class="result-card">
+                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> Result 2</h4>
+                        <div class="result-item claim"><strong>Claim:</strong> Pakistan’s jailed former Prime Minister Imran Khan has passed away in judicial custody, according to an alleged press release from the government.</div>
+                        <div class="result-item claimant"><strong>Claimant:</strong> Viral social media post</div>
+                        <div class="result-item rating"><strong>Rating:</strong> False</div>
+                        <div class="result-item reviewer"><strong>Reviewed by:</strong> Newschecker</div>
+                        <div class="result-item title"><strong>Title:</strong> Fact Check: Ex-Pakistan PM Imran Khan Dead In Jail? No, Fake ...</div>
+                        <div class="result-item link"><strong>More info:</strong> <a href="https://newschecker.in/fact-check/ex-pakistan-pm-imran-khan-dead-in-jail-no-fake-press-release-goes-viral" target="_blank">Read more</a></div>
+                    </div>
+                    <div class="result-divider"></div>
+
+                    <!-- Result 3 -->
+                    <div class="result-card">
+                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> Result 3</h4>
+                        <div class="result-item claim"><strong>Claim:</strong> Former Pakistan Prime Minister Imran Khan died in judicial custody on 10 May.</div>
+                        <div class="result-item claimant"><strong>Claimant:</strong> WhatsApp, Twitter</div>
+                        <div class="result-item rating"><strong>Rating:</strong> False</div>
+                        <div class="result-item reviewer"><strong>Reviewed by:</strong> The Quint</div>
+                        <div class="result-item title"><strong>Title:</strong> Viral Letter About Former Pakistan PM Imran Khan's Death Is Fake</div>
+                        <div class="result-item link"><strong>More info:</strong> <a href="https://www.thequint.com/news/webqoof/imran-khan-death-viral-letter-is-fake-fact-check" target="_blank">Read more</a></div>
+                    </div>
+                    <div class="result-divider"></div>
+
+                    <!-- Result 4 -->
+                    <div class="result-card">
+                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> Result 4</h4>
+                        <div class="result-item claim"><strong>Claim:</strong> Press release by Ministry of Foreign Affairs, Government of Pakistan claims Imran Khan died in judicial custody</div>
+                        <div class="result-item claimant"><strong>Claimant:</strong> Social Media Users</div>
+                        <div class="result-item rating"><strong>Rating:</strong> False</div>
+                        <div class="result-item reviewer"><strong>Reviewed by:</strong> BOOM Fact Check</div>
+                        <div class="result-item title"><strong>Title:</strong> Fake Document Claims Pakistan's Former PM Imran Khan Died In ...</div>
+                        <div class="result-item link"><strong>More info:</strong> <a href="https://www.boomlive.in/fact-check/fake-press-release-claims-former-pak-pm-imran-khan-dead-in-judicial-custody-28524" target="_blank">Read more</a></div>
+                    </div>
+                    <div class="result-divider"></div>
+
+                    <!-- Result 5 -->
+                    <div class="result-card">
+                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> Result 5</h4>
+                        <div class="result-item claim"><strong>Claim:</strong> A government press release and a photo of Imran Khan with a head injury prove that he has died in judicial custody.</div>
+                        <div class="result-item claimant"><strong>Claimant:</strong> Social media users</div>
+                        <div class="result-item rating"><strong>Rating:</strong> False</div>
+                        <div class="result-item reviewer"><strong>Reviewed by:</strong> NewsMeter</div>
+                        <div class="result-item title"><strong>Title:</strong> Fact Check: Pak ex-PM Imran Khan dead in judicial custody? No ...</div>
+                        <div class="result-item link"><strong>More info:</strong> <a href="https://newsmeter.in/fact-check/pak-ex-pm-imran-khan-dead-in-judicial-custody-no-the-press-release-is-fabricated-748228" target="_blank">Read more</a></div>
+                    </div>
+                    <div class="result-divider"></div>
+
+                    <!-- Result 6 -->
+                    <div class="result-card">
+                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> Result 6</h4>
+                        <div class="result-item claim"><strong>Claim:</strong> Pakistan Prime Minister Imran Khan is dead</div>
+                        <div class="result-item claimant"><strong>Claimant:</strong> Twitter Users</div>
+                        <div class="result-item rating"><strong>Rating:</strong> False</div>
+                        <div class="result-item reviewer"><strong>Reviewed by:</strong> NewsMeter</div>
+                        <div class="result-item title"><strong>Title:</strong> Fact Check: Pakistan Prime Minister Imran Khan is not dead, viral ...</div>
+                        <div class="result-item link"><strong>More info:</strong> <a href="https://newsmeter.in/fact-check/fact-check-pakistan-prime-minister-imran-khan-is-not-dead-viral-claim-is-hoax-682154" target="_blank">Read more</a></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Info Section -->
+            <div class="info-section">
+                <h2 class="info-title">
+                    <i class="fas fa-brain"></i> How Our System Works
+                    <span class="accuracy-badge">High Accuracy</span>
+                </h2>
+                
+                <p>Our Fact Check Api analyzes linguistic and structural features to assess news reliability:</p>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3><i class="fas fa-language"></i> Linguistic Analysis</h3>
+                        <p>Examines writing style, word choice, and tone for patterns common in misinformation.</p>
+                        <ul>
+                            <li>Detects sensational language</li>
+                            <li>Identifies manipulative phrasing</li>
+                            <li>Analyzes sentiment polarity</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3><i class="fas fa-project-diagram"></i> Structural Analysis</h3>
+                        <p>Evaluates content organization and presentation.</p>
+                        <ul>
+                            <li>Assesses source attribution</li>
+                            <li>Checks logical consistency</li>
+                            <li>Analyzes paragraph structure</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Limitations</h3>
+                        <p>Key considerations for using this tool:</p>
+                        <ul>
+                            <li>Does not verify facts in real-time</li>
+                            <li>Trained on historical data</li>
+                            <li>Not a substitute for human judgment</li>
+                            <li>Accuracy varies by topic</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-about">
+                    <div class="footer-logo">Fake News Detection</div>
+                    <p>Delivering fact-checked, reliable articles through advanced Fact Check Api for a more informed world.</p>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'predict' %}">Articles</a></li>
+                        <li><a href="{% url 'about' %}">About</a></li>
+                        <li><a href="{% url 'contactus' %}">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Account</h3>
+                    <ul>
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'signout' %}">Sign Out</a></li>
+                        {% else %}
+                            <li><a href="{% url 'signin' %}">Sign In</a></li>
+                            <li><a href="{% url 'signup' %}">Create Account</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">API Documentation</a></li>
+                        <li><a href="#">Research Papers</a></li>
+                        <li><a href="#">Methodology</a></li>
+                        <li><a href="#">Accuracy Report</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2025 Fake News Detection. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('show');
+        });
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('#navMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navMenu').classList.remove('show');
+            });
+        });
+    </script>
+</body>
+</html>
