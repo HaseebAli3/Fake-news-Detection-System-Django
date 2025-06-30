@@ -16,7 +16,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -28,7 +27,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Email configuration for OTP
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'fakenewsdetectionssystem@gmail.com'
+EMAIL_HOST_PASSWORD = 'dwlu abey hiwx bhwa'  # 👉 Better to keep this in .env
+DEFAULT_FROM_EMAIL = 'Fake News Detection System <fakenewsdetectionssystem@gmail.com>'
+
 
 # Application definition
 LOGIN_REDIRECT_URL = '/'  # Redirect to home page after login
@@ -40,11 +47,6 @@ STRIPE_TEST_SECRET_KEY = 'sk_test_51RHj8OGhl0mNQDnbOWwsKZtiJFMrMkssSaiP3tWHP4h6O
 STRIPE_PUBLIC_KEY = 'pk_test_51RHj8OGhl0mNQDnbzg4WhALVLGK7oxJeseN48zCx17Eu9NtNwsK6QH731rHiERBxA9aLE2UDgFARvNr9FUSir4IQ00Kpn8R0SS'
 STRIPE_SECRET_KEY = 'sk_test_51RHj8OGhl0mNQDnbOWwsKZtiJFMrMkssSaiP3tWHP4h6OcpPlFEYuSDdHcC3JkZtAExPi9m6sMEkYklXt87u7pXy00pvFV6Edc'
 STRIPE_WEBHOOK_SECRET = ''  # You'll need to set this up in your Stripe dashboard
-
-# In production, you should use environment variables:
-# STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY')
-# STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
-# STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -87,10 +89,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'adminpannel.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -98,10 +98,8 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -117,25 +115,17 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-
 STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

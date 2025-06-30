@@ -13,40 +13,44 @@ API_KEY = "AIzaSyA1aqMvXRgTfQPda9nZV9ZFJrdAmhrhtzM"
 
 def predict_fake_news(news_text):
     if not API_KEY:
-        return "Google Fact Check API key is not set. Please configure it."
+        return [{"error": "Google Fact Check API key is not set. Please configure it."}]
+    
     params = {
         "query": news_text,
         "key": API_KEY,
         "languageCode": "en"
     }
+    
     try:
         response = requests.get(FACT_CHECK_API_URL, params=params, timeout=10)
         if response.status_code == 200:
             data = response.json()
             claims = data.get("claims", [])
             if not claims:
-                return "❌ No fact-checks found for this claim."
+                return [{"error": "No fact-checks found for this claim."}]
+            
             results = []
-            for i, claim in enumerate(claims, start=1):
-                text = claim.get("text", "No text")
-                claimant = claim.get("claimant", "Unknown")
-                claim_review = claim.get("claimReview", [{}])[0]
-                publisher = claim_review.get("publisher", {}).get("name", "Unknown Publisher")
-                title = claim_review.get("title", "No title")
-                rating = claim_review.get("textualRating", "No rating")
-                url = claim_review.get("url", "No URL")
-                result = f"✅ Result {i}:\nClaim: {text}\nClaimant: {claimant}\nRating: {rating}\nReviewed by: {publisher}\nTitle: {title}\nMore info: {url}\n{'-'*60}"
+            for claim in claims:
+                result = {
+                    "claim": claim.get("text", "No text"),
+                    "claimant": claim.get("claimant", "Unknown"),
+                    "rating": claim.get("claimReview", [{}])[0].get("textualRating", "No rating"),
+                    "reviewer": claim.get("claimReview", [{}])[0].get("publisher", {}).get("name", "Unknown Publisher"),
+                    "title": claim.get("claimReview", [{}])[0].get("title", "No title"),
+                    "link": claim.get("claimReview", [{}])[0].get("url", "No URL")
+                }
                 results.append(result)
-            return "\n".join(results)
+            return results
         else:
-            return f"❌ Error: {response.status_code}\n{response.text}"
+            return [{"error": f"API Error: {response.status_code} - {response.text}"}]
     except Exception as e:
-        return f"Error contacting Google Fact Check API: {str(e)}"
-    # Fallback to model if API fails (optional)
+        return [{"error": f"Error contacting Google Fact Check API: {str(e)}"}]
+    
+    # Fallback to model if API fails (optional, commented out as in original)
     # result = fake_news_classifier(news_text)[0]
     # label = result['label']
     # score = result['score']
     # if label.upper() == 'REAL':
-    #     return f"✅ REAL news with {score * 100:.2f}% confidence."
+    #     return [{"claim": news_text, "rating": "Real", "score": f"{score * 100:.2f}%"}]
     # else:
-    #     return f"❌ FAKE news with {score * 100:.2f}% confidence."
+    #     return [{"claim": news_text, "rating": "Fake", "score": f"{score * 100:.2f}%"}]

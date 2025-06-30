@@ -158,6 +158,21 @@
             transform: translateY(-2px);
         }
 
+        .forgot-password {
+            font-size: 13px;
+            color: var(--gray);
+            text-decoration: none;
+            text-align: right;
+            margin-top: 10px;
+            display: block;
+            transition: var(--transition);
+        }
+
+        .forgot-password:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
         .signup-link {
             text-align: center;
             margin-top: 25px;
@@ -210,6 +225,10 @@
                 height: 48px;
                 font-size: 15px;
             }
+
+            .forgot-password {
+                font-size: 12px;
+            }
         }
     </style>
 </head>
@@ -218,48 +237,39 @@
         <h2>Sign In</h2>
         <form method="post">
             {% csrf_token %}
-            {% if form.non_field_errors %}
+            {% if messages %}
                 <div class="non-field-errors">
-                    {{ form.non_field_errors|join:" " }}
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
                 </div>
             {% endif %}
 
             <div class="form-group">
-                <label for="{{ form.username.id_for_label }}">Username</label>
+                <label for="email">Email</label>
                 <div class="input-wrapper">
-                    <i class="fas fa-user input-icon"></i>
-                    {{ form.username }}
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="email" name="email" id="email" required>
                 </div>
-                {% if form.username.errors %}
-                    <ul class="errorlist">
-                        {% for error in form.username.errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
             </div>
 
             <div class="form-group">
-                <label for="{{ form.password.id_for_label }}">Password</label>
+                <label for="password">Password</label>
                 <div class="input-wrapper">
                     <i class="fas fa-lock input-icon"></i>
-                    {{ form.password }}
-                    <button type="button" class="toggle-password" onclick="togglePassword('id_password')">
+                    <input type="password" name="password" id="password" required>
+                    <button type="button" class="toggle-password" onclick="togglePassword('password')">
                         <i class="fas fa-eye"></i>
                     </button>
                 </div>
-                {% if form.password.errors %}
-                    <ul class="errorlist">
-                        {% for error in form.password.errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
             </div>
 
             <button type="submit">
                 <i class="fas fa-sign-in-alt"></i> Sign In
             </button>
+            <a href="{% url 'password_reset_request' %}" class="forgot-password">
+                Forgot Password?
+            </a>
         </form>
         <p class="signup-link">Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
     </div>

@@ -510,6 +510,7 @@
 
             .hero {
                 padding: 60px 0;
+                width: 100%;
             }
 
             .hero h1 {
@@ -604,7 +605,7 @@
                         <li><a href="{% url 'signin' %}"><i class="fas fa-sign-in-alt"></i> Sign In</a></li>
                     {% endif %}
                     <li><a href="{% url 'contactus' %}"><i class="fas fa-envelope"></i> Contact</a></li>
-                    <li><a href="#" class="nav-btn"><i class="fas fa-search"></i> Detect Now</a></li>
+                    <li><a href="{% url 'predict' %}" class="nav-btn"><i class="fas fa-search"></i> Detect Now</a></li>
                 </ul>
             </nav>
         </div>
@@ -640,76 +641,34 @@
                 <div class="results">
                     <h3 class="results-title">Analysis Results</h3>
                     
-                    <!-- Result 1 -->
-                    <div class="result-card">
-                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> Result 1</h4>
-                        <div class="result-item claim"><strong>Claim:</strong> News of Imran Khan's death causes uproar in Pakistan</div>
-                        <div class="result-item claimant"><strong>Claimant:</strong> Facebook User News Thikana</div>
-                        <div class="result-item rating"><strong>Rating:</strong> False</div>
-                        <div class="result-item reviewer"><strong>Reviewed by:</strong> Unknown Publisher</div>
-                        <div class="result-item title"><strong>Title:</strong> Fact Check: Claim Of Imran Khan's Death In Jail Is Fake; Viral ...</div>
-                        <div class="result-item link"><strong>More info:</strong> <a href="https://www.vishvasnews.com/english/world/fact-check-claim-of-imran-khans-death-in-jail-is-fake-viral-statement-attributed-to-pakistans-foreign-ministry-is-fabricated/" target="_blank">Read more</a></div>
-                    </div>
-                    <div class="result-divider"></div>
-
-                    <!-- Result 2 -->
-                    <div class="result-card">
-                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> Result 2</h4>
-                        <div class="result-item claim"><strong>Claim:</strong> Pakistan’s jailed former Prime Minister Imran Khan has passed away in judicial custody, according to an alleged press release from the government.</div>
-                        <div class="result-item claimant"><strong>Claimant:</strong> Viral social media post</div>
-                        <div class="result-item rating"><strong>Rating:</strong> False</div>
-                        <div class="result-item reviewer"><strong>Reviewed by:</strong> Newschecker</div>
-                        <div class="result-item title"><strong>Title:</strong> Fact Check: Ex-Pakistan PM Imran Khan Dead In Jail? No, Fake ...</div>
-                        <div class="result-item link"><strong>More info:</strong> <a href="https://newschecker.in/fact-check/ex-pakistan-pm-imran-khan-dead-in-jail-no-fake-press-release-goes-viral" target="_blank">Read more</a></div>
-                    </div>
-                    <div class="result-divider"></div>
-
-                    <!-- Result 3 -->
-                    <div class="result-card">
-                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> Result 3</h4>
-                        <div class="result-item claim"><strong>Claim:</strong> Former Pakistan Prime Minister Imran Khan died in judicial custody on 10 May.</div>
-                        <div class="result-item claimant"><strong>Claimant:</strong> WhatsApp, Twitter</div>
-                        <div class="result-item rating"><strong>Rating:</strong> False</div>
-                        <div class="result-item reviewer"><strong>Reviewed by:</strong> The Quint</div>
-                        <div class="result-item title"><strong>Title:</strong> Viral Letter About Former Pakistan PM Imran Khan's Death Is Fake</div>
-                        <div class="result-item link"><strong>More info:</strong> <a href="https://www.thequint.com/news/webqoof/imran-khan-death-viral-letter-is-fake-fact-check" target="_blank">Read more</a></div>
-                    </div>
-                    <div class="result-divider"></div>
-
-                    <!-- Result 4 -->
-                    <div class="result-card">
-                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> Result 4</h4>
-                        <div class="result-item claim"><strong>Claim:</strong> Press release by Ministry of Foreign Affairs, Government of Pakistan claims Imran Khan died in judicial custody</div>
-                        <div class="result-item claimant"><strong>Claimant:</strong> Social Media Users</div>
-                        <div class="result-item rating"><strong>Rating:</strong> False</div>
-                        <div class="result-item reviewer"><strong>Reviewed by:</strong> BOOM Fact Check</div>
-                        <div class="result-item title"><strong>Title:</strong> Fake Document Claims Pakistan's Former PM Imran Khan Died In ...</div>
-                        <div class="result-item link"><strong>More info:</strong> <a href="https://www.boomlive.in/fact-check/fake-press-release-claims-former-pak-pm-imran-khan-dead-in-judicial-custody-28524" target="_blank">Read more</a></div>
-                    </div>
-                    <div class="result-divider"></div>
-
-                    <!-- Result 5 -->
-                    <div class="result-card">
-                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> Result 5</h4>
-                        <div class="result-item claim"><strong>Claim:</strong> A government press release and a photo of Imran Khan with a head injury prove that he has died in judicial custody.</div>
-                        <div class="result-item claimant"><strong>Claimant:</strong> Social media users</div>
-                        <div class="result-item rating"><strong>Rating:</strong> False</div>
-                        <div class="result-item reviewer"><strong>Reviewed by:</strong> NewsMeter</div>
-                        <div class="result-item title"><strong>Title:</strong> Fact Check: Pak ex-PM Imran Khan dead in judicial custody? No ...</div>
-                        <div class="result-item link"><strong>More info:</strong> <a href="https://newsmeter.in/fact-check/pak-ex-pm-imran-khan-dead-in-judicial-custody-no-the-press-release-is-fabricated-748228" target="_blank">Read more</a></div>
-                    </div>
-                    <div class="result-divider"></div>
-
-                    <!-- Result 6 -->
-                    <div class="result-card">
-                        <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> Result 6</h4>
-                        <div class="result-item claim"><strong>Claim:</strong> Pakistan Prime Minister Imran Khan is dead</div>
-                        <div class="result-item claimant"><strong>Claimant:</strong> Twitter Users</div>
-                        <div class="result-item rating"><strong>Rating:</strong> False</div>
-                        <div class="result-item reviewer"><strong>Reviewed by:</strong> NewsMeter</div>
-                        <div class="result-item title"><strong>Title:</strong> Fact Check: Pakistan Prime Minister Imran Khan is not dead, viral ...</div>
-                        <div class="result-item link"><strong>More info:</strong> <a href="https://newsmeter.in/fact-check/fact-check-pakistan-prime-minister-imran-khan-is-not-dead-viral-claim-is-hoax-682154" target="_blank">Read more</a></div>
-                    </div>
+                    {% if results %}
+                        {% for result in results %}
+                            <div class="result-card">
+                                <h4>
+                                    
+                                    Result {{ forloop.counter }}
+                                </h4>
+                                <div class="result-item claim"><strong>Claim:</strong> {{ result.claim|safe }}</div>
+                                <div class="result-item claimant"><strong>Claimant:</strong> {{ result.claimant|safe }}</div>
+                                <div class="result-item rating {% if result.rating|lower == 'real' %}real{% endif %}">
+                                    <strong>Rating:</strong> {{ result.rating|safe }}
+                                </div>
+                                <div class="result-item reviewer"><strong>Reviewed by:</strong> {{ result.reviewer|safe }}</div>
+                                <div class="result-item title"><strong>Title:</strong> {{ result.title|safe }}</div>
+                                <div class="result-item link">
+                                    <strong>More info:</strong> 
+                                    <a href="{{ result.link|safe }}" target="_blank">Read more</a>
+                                </div>
+                            </div>
+                            {% if not forloop.last %}
+                                <div class="result-divider"></div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <div class="result-card">
+                            <p>No results available. Please submit news content to analyze.</p>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
             
@@ -774,7 +733,7 @@
                         <li><a href="{% url 'predict' %}">Articles</a></li>
                         <li><a href="{% url 'about' %}">About</a></li>
                         <li><a href="{% url 'contactus' %}">Contact</a></li>
-                    </ul>
+ omen                    </ul>
                 </div>
                 
                 <div class="footer-links">
