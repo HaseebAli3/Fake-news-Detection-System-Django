@@ -30,6 +30,9 @@ def predict_news(request):
         news_text = request.POST.get('news_text')
         if news_text:
             results = predict_fake_news(news_text)
+            print(results)
+            if results == [{'error': 'No fact-checks found for this claim.'}]:
+                results = None
     return render(request, "predict_form.html", {"results": results})
 
 def donation_success(request):
@@ -225,7 +228,7 @@ def signup_verify_otp(request, email):
                 logger.warning(f"Session expired for email: {email}")
                 return redirect('signup')
             user = User.objects.create_user(
-                username=f"user_{uuid.uuid4().hex[:20]}",
+                username=form_data['display_name'], 
                 email=form_data['email'],
                 password=form_data['password1']
             )
